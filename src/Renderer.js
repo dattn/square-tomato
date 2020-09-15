@@ -1,24 +1,24 @@
 export default class Renderer {
     constructor () {
         this.mountTo = null
-        this.layers = []
+        this.layers = new Set()
     }
 
     addLayer (layer) {
-        this.layers.push(layer)
+        this.layers.add(layer)
         layer.mount(this.mountTo)
+    }
+
+    removeLayer (layer) {
+        this.layers.delete(layer)
     }
 
     mount (targetElement) {
         this.mountTo = targetElement
-        for (let i = 0; i < this.layers.length; i++) {
-            this.layers.mount(this.mountTo)
-        }
+        this.layers.forEach(layer => layer.mount(this.mountTo))
     }
 
-    render (delta, time) {
-        for (let i = 0; i < this.layers.length; i++) {
-            this.layers[i].render(delta, time)
-        }
+    render (loopContext) {
+        this.layers.forEach(layer => layer.render(loopContext))
     }
 }

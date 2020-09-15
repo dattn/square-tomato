@@ -14,11 +14,11 @@ renderer.mount(document.getElementById('Game'))
 const layer = new RenderLayer('tomato')
 renderer.addLayer(layer)
 
-function update (delta, time) {
+function update (loopContext) {
 } 
 
-function render (delta, time) {
-    renderer.render(delta, time)
+function render (loopContext) {
+    renderer.render(loopContext)
 }
 
 const loop = new GameLoop({

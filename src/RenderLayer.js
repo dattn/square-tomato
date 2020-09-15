@@ -13,7 +13,7 @@ export default class RenderLayer {
         }
     }
 
-    render () {
+    render (loopContext) {
         const { context, canvas: { width, height }, color } = this
         if (color === null) {
             context.clearRect(0, 0, width, height)

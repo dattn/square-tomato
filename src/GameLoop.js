@@ -7,6 +7,11 @@ export default class GameLoop {
         this.isRunning = false
         this.timeoutHandle = null
         this.lastFrameTime = null
+        this.loopContext = {
+            delta: null,
+            deltaInMs: null,
+            time: null
+        }
     }
 
     start () {
@@ -24,16 +29,25 @@ export default class GameLoop {
     _nextFrame () {
         this._cancelNext()
         this.timeoutHandle = requestAnimationFrame(() => {
-            // handle update
-            var now = performance.now()
+            const { loopContext, delta } = this
+            const time = performance.now()
 
-            while (this.lastFrameTime < now) {
-                this.lastFrameTime += this.delta
-                this.update(this.delta, this.lastFrameTime)
+            // handle update
+            while (this.lastFrameTime < time) {
+                this.lastFrameTime += delta
+
+                loopContext.delta = 1
+                loopContext.deltaInMs = delta
+                loopContext.time = this.lastFrameTime
+                this.update(loopContext)
             }
 
             // handle render
-            this.render(this.delta - this.lastFrameTime + now, now)
+            const renderDelta = delta - this.lastFrameTime + time
+            loopContext.delta = renderDelta / delta
+            loopContext.deltaInMs = renderDelta
+            loopContext.time = time
+            this.render(loopContext)
 
             // start next frame
             this._nextFrame()
