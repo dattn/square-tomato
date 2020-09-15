@@ -1,0 +1,16 @@
+{
+    "name": "@dattn/td-shooter",
+    "version": "0.1.0-dev",
+    "description": "",
+    "main": "src/Game.js",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "vite": "^1.0.0-rc.4"
+    }
+}
