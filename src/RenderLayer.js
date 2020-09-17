@@ -2,6 +2,8 @@ export default class RenderLayer {
     constructor (color = null) {
         this.color = color
         this.canvas = document.createElement('canvas')
+        this.width = this.canvas.width
+        this.height = this.canvas.height
         this.context = this.canvas.getContext('2d', { alpha: this.color === null })
         this.elements = new Set()
         this.renderContext = {
@@ -11,10 +13,11 @@ export default class RenderLayer {
     }
 
     mount (targetElement) {
+        const { canvas } = this
         if (targetElement) {
-            targetElement.appendChild(this.canvas)
+            targetElement.appendChild(canvas)
         } else {
-            this.canvas.remove()
+            canvas.remove()
         }
     }
 
@@ -27,8 +30,20 @@ export default class RenderLayer {
         this.elements.delete(element)
     }
 
+    updateSize () {
+        const { canvas } = this
+        const width = canvas.parentElement.clientWidth
+        const height = canvas.parentElement.clientHeight
+        if (width !== this.width || height !== this.height) {
+            canvas.width = width
+            canvas.height = height
+        }
+    }
+
     render (gameContext) {
-        const { context, canvas: { width, height }, color } = this
+        this.updateSize()
+        const { context, canvas, color, width, height } = this
+
         if (color === null) {
             context.clearRect(0, 0, width, height)
         } else {

@@ -4,6 +4,7 @@ import Renderer from './Renderer.js'
 import GameLoop from './GameLoop.js'
 import RenderLayer from './RenderLayer.js'
 import EntityContainer from './EntityContainer.js'
+import Map from './Map.js'
 
 const assetLoader = new AssetLoader()
 assetLoader.load('characters', './assets/characters.png')
@@ -17,6 +18,9 @@ renderer.addLayer(renderLayer)
 
 const entityContainer = new EntityContainer()
 renderLayer.addElement(entityContainer)
+
+const map = new Map()
+renderLayer.addElement(map)
 
 const gameContext = {
     delta: null,
