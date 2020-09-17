@@ -18,7 +18,7 @@ export default class Renderer {
         this.layers.forEach(layer => layer.mount(this.mountTo))
     }
 
-    render (loopContext) {
-        this.layers.forEach(layer => layer.render(loopContext))
+    render (gameContext) {
+        this.layers.forEach(layer => layer.render(gameContext))
     }
 }

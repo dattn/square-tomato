@@ -1,17 +1,12 @@
 export default class GameLoop {
     constructor ({ fps = 30, update, render } = {}) {
-        this.delta = 1000 / fps
+        this.deltaInMs = 1000 / fps
         this.update = update || (() => {})
         this.render = render || (() => {})
 
         this.isRunning = false
         this.timeoutHandle = null
         this.lastFrameTime = null
-        this.loopContext = {
-            delta: null,
-            deltaInMs: null,
-            time: null
-        }
     }
 
     start () {
@@ -29,25 +24,26 @@ export default class GameLoop {
     _nextFrame () {
         this._cancelNext()
         this.timeoutHandle = requestAnimationFrame(() => {
-            const { loopContext, delta } = this
+            const { loopContext, deltaInMs } = this
             const time = performance.now()
 
             // handle update
             while (this.lastFrameTime < time) {
-                this.lastFrameTime += delta
-
-                loopContext.delta = 1
-                loopContext.deltaInMs = delta
-                loopContext.time = this.lastFrameTime
-                this.update(loopContext)
+                this.lastFrameTime += deltaInMs
+                this.update(
+                    1, // update delta is always 1
+                    deltaInMs,
+                    this.lastFrameTime
+                )
             }
 
             // handle render
-            const renderDelta = delta - this.lastFrameTime + time
-            loopContext.delta = renderDelta / delta
-            loopContext.deltaInMs = renderDelta
-            loopContext.time = time
-            this.render(loopContext)
+            const renderDeltaInMs = deltaInMs - this.lastFrameTime + time
+            this.render(
+                renderDeltaInMs / deltaInMs,
+                renderDeltaInMs,
+                time
+            )
 
             // start next frame
             this._nextFrame()

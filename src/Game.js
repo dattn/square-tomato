@@ -3,6 +3,7 @@ import AssetLoader from './AssetLoader.js'
 import Renderer from './Renderer.js'
 import GameLoop from './GameLoop.js'
 import RenderLayer from './RenderLayer.js'
+import EntityContainer from './EntityContainer.js'
 
 const assetLoader = new AssetLoader()
 assetLoader.load('characters', './assets/characters.png')
@@ -11,14 +12,31 @@ assetLoader.load('tiles', './assets/tiles.png')
 const renderer = new Renderer()
 renderer.mount(document.getElementById('Game'))
 
-const layer = new RenderLayer('tomato')
-renderer.addLayer(layer)
+const renderLayer = new RenderLayer('tomato')
+renderer.addLayer(renderLayer)
 
-function update (loopContext) {
-} 
+const entityContainer = new EntityContainer()
+renderLayer.addElement(entityContainer)
 
-function render (loopContext) {
-    renderer.render(loopContext)
+const gameContext = {
+    delta: null,
+    deltaInMs: null,
+    time: null,
+    renderContext: null
+}
+
+function update (delta, deltaInMs, time) {
+    gameContext.delta = delta
+    gameContext.deltaInMs = deltaInMs
+    gameContext.time = time
+    entityContainer.update(gameContext)
+}
+
+function render (delta, deltaInMs, time) {
+    gameContext.delta = delta
+    gameContext.deltaInMs = deltaInMs
+    gameContext.time = time
+    renderer.render(gameContext)
 }
 
 const loop = new GameLoop({

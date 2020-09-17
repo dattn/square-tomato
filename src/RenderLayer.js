@@ -3,6 +3,11 @@ export default class RenderLayer {
         this.color = color
         this.canvas = document.createElement('canvas')
         this.context = this.canvas.getContext('2d', { alpha: this.color === null })
+        this.elements = new Set()
+        this.renderContext = {
+            canvas: this.canvas,
+            context: this.context
+        }
     }
 
     mount (targetElement) {
@@ -13,7 +18,16 @@ export default class RenderLayer {
         }
     }
 
-    render (loopContext) {
+    addElement (element) {
+        this.elements.add(element)
+    }
+
+    removeElement (element)
+    {
+        this.elements.delete(element)
+    }
+
+    render (gameContext) {
         const { context, canvas: { width, height }, color } = this
         if (color === null) {
             context.clearRect(0, 0, width, height)
@@ -21,5 +35,6 @@ export default class RenderLayer {
             context.fillStyle = color
             context.fillRect(0, 0, width, height)
         }
+        this.elements.forEach(element => element.render(this.renderContext, gameContext))
     }
 }
