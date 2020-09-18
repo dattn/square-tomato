@@ -1,4 +1,37 @@
 export const TYPE_IMAGE = Symbol('TYPE_IMAGE')
+export const TYPE_JSON = Symbol('TYPE_JSON')
+
+async function handleResponse (response, type) {
+    let data
+    switch (type) {
+        case TYPE_IMAGE:
+            data = await convertToImage(response)
+            break
+
+        case TYPE_JSON:
+            data = await convertToJson(response)
+            break
+
+        default:
+            throw new Error('Unknown asset type')
+    }
+    return data
+}
+
+async function convertToImage (response) {
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    const img = new Image()
+    return new Promise(resolve => {
+        img.onload = () => resolve(img)
+        img.src = url
+    })
+
+}
+
+async function convertToJson (response) {
+    return await response.json()
+}
 
 export default class AssetLoader {
     constructor () {
@@ -13,21 +46,9 @@ export default class AssetLoader {
                     if (!response.ok) {
                         return Promise.reject(new Error(response.statusText))
                     }
-                    return response.blob()
+                    return handleResponse(response, type)
                 })
-                .then(blob => {
-                    const url = URL.createObjectURL(blob)
-                    switch (type) {
-                        case TYPE_IMAGE:
-                            const img = new Image()
-                            img.src = url
-                            this.assets.set(name, img)
-                            break
-
-                        default:
-                            throw new Error('Unknown asset type')
-                    }
-                })
+                .then(data => this.assets.set(name, data))
         )
         return this.ready()
     }
