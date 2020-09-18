@@ -1,9 +1,5 @@
-import tilesImageFile from './assets/tiles.png'
-const image = new Image()
-image.src = tilesImageFile
-
 export default class Map {
-    render (renderContext) {
-        renderContext.context.drawImage(image, 0, 0)
+    render (renderContext, gameContext) {
+        renderContext.context.drawImage(gameContext.assetLoader.get('characters'), 0, 0)
     }
 }

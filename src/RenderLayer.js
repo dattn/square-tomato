@@ -35,8 +35,8 @@ export default class RenderLayer {
         const width = canvas.parentElement.clientWidth
         const height = canvas.parentElement.clientHeight
         if (width !== this.width || height !== this.height) {
-            canvas.width = width
-            canvas.height = height
+            this.width = canvas.width = width
+            this.height = canvas.height = height
         }
     }
 
