@@ -2,9 +2,9 @@ import Vector from './Vector.js'
 
 let NEXT_ID = 1
 
-export default class Trait {
+export class Trait {
     update (/* entity, gameContext */) {}
-    render (/* entity, renderContext, renderContext */) {}
+    render (/* entity, renderContext, gameContext */) {}
 }
 
 export default class Entity {
@@ -24,7 +24,13 @@ export default class Entity {
     }
 
     update (gameContext) {
-        this.traits.forEach(trait => trait.update(this, gameContext))
+        const { position, velocity, traits } = this
+        const { delta } = gameContext
+
+        traits.forEach(trait => trait.update(this, gameContext))
+        position.x += velocity.x * delta
+        position.y += velocity.y * delta
+        velocity.set(0, 0)
     }
 
     render (renderContext, gameContext) {

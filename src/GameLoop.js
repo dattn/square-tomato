@@ -1,6 +1,6 @@
 export default class GameLoop {
     constructor ({ fps = 30, update, render } = {}) {
-        this.deltaInMs = 1000 / fps
+        this.deltaInMs = Math.floor(1000 / fps)
         this.update = update || (() => {})
         this.render = render || (() => {})
 

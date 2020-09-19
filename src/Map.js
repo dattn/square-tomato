@@ -4,10 +4,10 @@ export default class Map {
         const { spriteSheet } = gameContext
 
         const pattern = context.createPattern(
-            spriteSheet.tiles.getSprite('tile_534.png'),
+            spriteSheet.tiles.getSprite('tile_01.png'),
             'repeat'
         )
         context.fillStyle = pattern
-        context.fillRect(0, 0, 64, 128)
+        context.fillRect(0, 0, canvas.width, canvas.height)
     }
 }

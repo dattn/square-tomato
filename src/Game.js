@@ -6,6 +6,8 @@ import RenderLayer from './RenderLayer.js'
 import EntityContainer from './EntityContainer.js'
 import Map from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
+import Keyboard from './input/Keyboard.js'
+import createPlayer from './createPlayer.js'
 
 (async () => {
     try {
@@ -30,6 +32,11 @@ import SpriteSheet from './SpriteSheet.js'
 
         const map = new Map()
         renderLayer.addElement(map)
+        
+        const keyboard = new Keyboard()
+        const player = createPlayer(keyboard)
+        entityContainer.addEntity(player)
+        renderLayer.addElement(player)
 
         const gameContext = {
             delta: null,
