@@ -17,7 +17,7 @@ import SpriteSheet from './SpriteSheet.js'
         const renderer = new Renderer()
         renderer.mount(document.getElementById('Game'))
 
-        const renderLayer = new RenderLayer('tomato')
+        const renderLayer = new RenderLayer('gray')
         renderer.addLayer(renderLayer)
 
         const entityContainer = new EntityContainer()

@@ -8,28 +8,26 @@ export default class SpriteSheet {
     }
 
     buildSprites () {
-        this.config.frames.forEach(({ frame, sourceSize, spriteSourceSize, filename, rotated }) => {
+        const { image, config, sprites } = this
+        config.frames.forEach(({ frame: source, sourceSize, spriteSourceSize: target, filename, rotated }) => {
             const canvas = document.createElement('canvas')
             const context = canvas.getContext('2d')
-            canvas.width = sourceSize.w
-            canvas.height = sourceSize.h
+            const width = canvas.width = sourceSize.w
+            const height = canvas.height = sourceSize.h
             if (rotated) {
-                context.save()
-                context.translate(canvas.width/2, canvas.height/2)
+                context.translate(width/2, height/2)
                 context.rotate(-Math.PI / 2)
-                context.translate(-canvas.width/2, -canvas.height/2)
-                context.drawImage(this.image,
-                    frame.x, frame.y, frame.h, frame.w,
-                    spriteSourceSize.y, spriteSourceSize.x, spriteSourceSize.h, spriteSourceSize.w
+                context.drawImage(image,
+                    source.x, source.y, source.h, source.w,
+                    -(height/2) + target.y, -(width/2) + target.x, target.h, target.w
                 )
-                context.restore()
             } else {
-                context.drawImage(this.image,
-                    frame.x, frame.y, frame.w, frame.h,
-                    spriteSourceSize.x, spriteSourceSize.y, spriteSourceSize.w, spriteSourceSize.h
+                context.drawImage(image,
+                    source.x, source.y, source.w, source.h,
+                    target.x, target.y, target.w, target.h
                 )
             }
-            this.sprites.set(filename, canvas)
+            sprites.set(filename, canvas)
         })
     }
 
@@ -37,3 +35,25 @@ export default class SpriteSheet {
         return this.sprites.get(name)
     }
 }
+
+// {
+//     "filename": "tile_532.png",
+//     "frame": {
+//         "x": 1866,
+//         "y": 773,
+//         "w": 51,
+//         "h": 28
+//     },
+//     "rotated": true,
+//     "trimmed": true,
+//     "spriteSourceSize": {
+//         "x": 13,
+//         "y": 18,
+//         "w": 51,
+//         "h": 28
+//     },
+//     "sourceSize": {
+//         "w": 64,
+//         "h": 64
+//     }
+// }
