@@ -32,9 +32,12 @@ import createPlayer from './createPlayer.js'
 
         const map = new Map()
         renderLayer.addElement(map)
+
+        const sprites = [ ...tilesSpriteSheet.sprites.values() ]
+        const playerSprite = sprites[Math.floor(Math.random() * sprites.length)]
         
         const keyboard = new Keyboard()
-        const player = createPlayer(keyboard)
+        const player = createPlayer(playerSprite, keyboard)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
 

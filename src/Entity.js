@@ -11,6 +11,9 @@ export default class Entity {
     constructor () {
         this.traits = new Map()
         this.id = NEXT_ID++
+
+        this.lastPosition = new Vector()
+        this.lastVelocity = new Vector()
         this.position = new Vector()
         this.velocity = new Vector()
     }
@@ -24,13 +27,16 @@ export default class Entity {
     }
 
     update (gameContext) {
-        const { position, velocity, traits } = this
+        const { position, velocity, lastPosition, lastVelocity, traits } = this
         const { delta } = gameContext
+
+        lastPosition.set(position)
+        lastVelocity.set(velocity)
+        velocity.set(0, 0)
 
         traits.forEach(trait => trait.update(this, gameContext))
         position.x += velocity.x * delta
         position.y += velocity.y * delta
-        velocity.set(0, 0)
     }
 
     render (renderContext, gameContext) {

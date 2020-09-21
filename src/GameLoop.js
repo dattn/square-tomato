@@ -25,9 +25,9 @@ export default class GameLoop {
         this._cancelNext()
         this.timeoutHandle = requestAnimationFrame(() => {
             const { loopContext, deltaInMs } = this
-            const time = performance.now()
-
+            
             // handle update
+            let time = performance.now()
             while (this.lastFrameTime < time) {
                 this.lastFrameTime += deltaInMs
                 this.update(
@@ -35,6 +35,7 @@ export default class GameLoop {
                     deltaInMs,
                     this.lastFrameTime
                 )
+                time = performance.now()
             }
 
             // handle render

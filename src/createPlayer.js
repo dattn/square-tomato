@@ -18,23 +18,39 @@ class Control extends Trait {
 }
 
 class RenderPlayer extends Trait {
-    render (entity, renderContext, gameContext) {
-        const { spriteSheet } = gameContext
-        const { context } = renderContext
-        const { position } = entity
-        const sprite = spriteSheet.tiles.getSprite('tile_534.png')
+    constructor (sprite) {
+        super()
+        this.sprite = sprite
+    }
 
-        context.drawImage(sprite, position.x - 32, position.y -32)
+    render (entity, renderContext, gameContext) {
+        const { sprite } = this
+        const { delta } = gameContext
+        const { context } = renderContext
+        const { position, lastPosition, velocity, lastVelocity } = entity
+
+        const lastAngle = lastVelocity.angle()
+        const angle = velocity.angle()
+        const renderAngle = lastAngle + ((angle - lastAngle) * delta)
+
+        const x = lastPosition.x + ((position.x - lastPosition.x) * delta)
+        const y = lastPosition.y + ((position.y - lastPosition.y) * delta)
+        
+        context.save()
+        context.translate(x, y)
+        context.rotate(renderAngle)
+        context.drawImage(sprite, -32, -32)
+        context.restore()
     }
 }
 
-export default function createPlayer (input) {
+export default function createPlayer (sprite, input) {
     const player = new Entity()
     player.position.set(100, 100)
     player.addTrait(new Control(input))
     const walk = new Walk()
-    walk.speed = 3
+    walk.speed = 20
     player.addTrait(walk)
-    player.addTrait(new RenderPlayer())
+    player.addTrait(new RenderPlayer(sprite))
     return player
 }
