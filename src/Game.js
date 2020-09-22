@@ -6,7 +6,7 @@ import RenderLayer from './RenderLayer.js'
 import EntityContainer from './EntityContainer.js'
 import Map from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
-import Keyboard from './input/Keyboard.js'
+import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
 
 (async () => {
@@ -36,8 +36,8 @@ import createPlayer from './createPlayer.js'
         const sprites = [ ...tilesSpriteSheet.sprites.values() ]
         const playerSprite = sprites[Math.floor(Math.random() * sprites.length)]
         
-        const keyboard = new Keyboard()
-        const player = createPlayer(playerSprite, keyboard)
+        const keyboardMouse = new KeyboardMouse(renderer)
+        const player = createPlayer(playerSprite, keyboardMouse)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
 

@@ -1,5 +1,6 @@
 import Entity, { Trait } from './Entity.js'
 import Walk from './traits/Walk.js'
+import Vector from './Vector.js'
 
 class Control extends Trait {
     constructor (input) {
@@ -10,10 +11,11 @@ class Control extends Trait {
     update(entity) {
         const { input } = this
         const walk = entity.getTrait(Walk)
-        if (input.isDown('KeyW') || input.isDown('ArrowUp')) walk.up()
-        if (input.isDown('KeyA') || input.isDown('ArrowLeft')) walk.left()
-        if (input.isDown('KeyS') || input.isDown('ArrowDown')) walk.down()
-        if (input.isDown('KeyD') || input.isDown('ArrowRight')) walk.right()
+        if (input.isKeyDown('KeyW') || input.isKeyDown('ArrowUp')) walk.up()
+        if (input.isKeyDown('KeyA') || input.isKeyDown('ArrowLeft')) walk.left()
+        if (input.isKeyDown('KeyS') || input.isKeyDown('ArrowDown')) walk.down()
+        if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) walk.right()
+        walk.lookAt.set(input.mousePosition)
     }
 }
 
@@ -21,24 +23,22 @@ class RenderPlayer extends Trait {
     constructor (sprite) {
         super()
         this.sprite = sprite
+        this.renderDirection = new Vector()
     }
 
     render (entity, renderContext, gameContext) {
-        const { sprite } = this
+        const { sprite, renderDirection } = this
         const { delta } = gameContext
         const { context } = renderContext
-        const { position, lastPosition, velocity, lastVelocity } = entity
-
-        const lastAngle = lastVelocity.angle()
-        const angle = velocity.angle()
-        const renderAngle = lastAngle + ((angle - lastAngle) * delta)
+        const { position, lastPosition, direction, lastDirection } = entity
 
         const x = lastPosition.x + ((position.x - lastPosition.x) * delta)
         const y = lastPosition.y + ((position.y - lastPosition.y) * delta)
+        renderDirection.set(lastDirection).lerp(direction, delta)
         
         context.save()
         context.translate(x, y)
-        context.rotate(renderAngle)
+        context.rotate(renderDirection.angle())
         context.drawImage(sprite, -32, -32)
         context.restore()
     }

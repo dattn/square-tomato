@@ -135,4 +135,9 @@ export default class Vector {
         this.y = (x * sinAngle) + (y * cosAngle)
         return this
     }
+
+    lerp (vector, delta) {
+        this.x = this.x + ((vector.x - this.x) * delta)
+        this.y = this.y + ((vector.y - this.y) * delta)
+    }
 }
