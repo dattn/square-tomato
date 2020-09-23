@@ -1,4 +1,4 @@
-import Vector from './Vector.js';
+import Vector from './Vector.js'
 
 export default class Camera {
     constructor () {
@@ -12,7 +12,7 @@ export default class Camera {
         this.direction.set(entity.lastDirection).lerp(entity.direction, delta)
     }
 
-    translate(renderContext) {
+    transform (renderContext) {
         const { center, position, direction } = this
         const { context, canvas } = renderContext
 

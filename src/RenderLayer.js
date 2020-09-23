@@ -47,7 +47,7 @@ export default class RenderLayer {
 
     render (gameContext) {
         this.updateSize()
-        const { context, canvas, color, width, height, camera } = this
+        const { context, color, width, height, camera } = this
 
         if (color === null) {
             context.clearRect(0, 0, width, height)
@@ -58,7 +58,7 @@ export default class RenderLayer {
 
         context.save()
         if (camera) {
-            camera.translate(this.renderContext)
+            camera.transform(this.renderContext)
         }
         this.elements.forEach(element => element.render(this.renderContext, gameContext))
         context.restore()
