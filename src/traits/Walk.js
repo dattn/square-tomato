@@ -9,9 +9,9 @@ export default class Walk extends Trait {
     }
 
     update (entity, gameContext) {
-        const { move, speed, lookAt } = this
-        const { velocity, position, direction } = entity
-        move.normalize().multiply(speed)
+        const { move, speed } = this
+        const { velocity, direction } = entity
+        move.normalize().multiply(speed).rotate(direction.angle())
         velocity.add(move)
         move.set(0, 0)     
     }
