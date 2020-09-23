@@ -9,7 +9,6 @@
         "url": "https://github.com/dattn/square-tomato.git"
     },
     "license": "MIT",
-    "type": "module",
     "main": "src/Game.js",
     "scripts": {
         "serve": "vite serve",
