@@ -63,14 +63,14 @@ async function startGame (elementToReplace) {
             camera
         }
 
-        function update (delta, deltaInMs, time) {
+        const update = (delta, deltaInMs, time) => {
             gameContext.delta = delta
             gameContext.deltaInMs = deltaInMs
             gameContext.time = time
             entityContainer.update(gameContext)
         }
 
-        function render (delta, deltaInMs, time) {
+        const render = (delta, deltaInMs, time) => {
             gameContext.delta = delta
             gameContext.deltaInMs = deltaInMs
             gameContext.time = time
