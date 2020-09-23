@@ -15,9 +15,7 @@ async function startGame (elementToReplace) {
         const gameContainerElement = document.createElement('div')
         gameContainerElement.classList.add('gameContainer')
         elementToReplace.replaceWith(gameContainerElement)
-
-        gameContainerElement.requestPointerLock()
-
+        
         const assetLoader = new AssetLoader()
         assetLoader.load('tiles', './assets/tiles.png', TYPE_IMAGE)
         assetLoader.load('tiles-config', './assets/tiles.json', TYPE_JSON)
@@ -83,7 +81,23 @@ async function startGame (elementToReplace) {
             update,
             render
         })
-        loop.start()
+
+        const handlePointerLockChange = () => {
+            const requestPointerLock = () => {
+                gameContainerElement.requestPointerLock()
+                gameContainerElement.removeEventListener('click', requestPointerLock)
+            }
+            if (document.pointerLockElement === gameContainerElement) {
+                loop.start()
+            } else {
+                loop.stop()
+                gameContainerElement.addEventListener('click', requestPointerLock)
+            }
+        }
+
+        window.addEventListener('pointerlockchange', handlePointerLockChange)
+
+        gameContainerElement.requestPointerLock()
     } catch (err) {
         console.error('Unhandled Error:', err.message || err)
         console.error(err)
