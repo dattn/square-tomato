@@ -1,14 +1,18 @@
 {
-    "name": "@dattn/td-shooter",
+    "name": "@dattn/square-tomato",
     "version": "0.1.0-dev",
-    "description": "",
+    "description": "Square Tomate Game",
     "main": "src/Game.js",
     "scripts": {
         "serve": "vite serve",
         "build": "vite build"
     },
     "keywords": [],
-    "author": "",
+    "author": "Daniel Duton <daniel@duton.lu> (https://github.com/dattn)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dattn/square-tomato.git"
+    },
     "license": "MIT",
     "devDependencies": {
         "koa-mount": "^4.0.0",

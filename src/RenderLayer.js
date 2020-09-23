@@ -10,6 +10,7 @@ export default class RenderLayer {
             canvas: this.canvas,
             context: this.context
         }
+        this.camera = null
     }
 
     mount (targetElement) {
@@ -40,9 +41,13 @@ export default class RenderLayer {
         }
     }
 
+    useCamera (camera) {
+        this.camera = camera
+    }
+
     render (gameContext) {
         this.updateSize()
-        const { context, canvas, color, width, height } = this
+        const { context, canvas, color, width, height, camera } = this
 
         if (color === null) {
             context.clearRect(0, 0, width, height)
@@ -50,6 +55,12 @@ export default class RenderLayer {
             context.fillStyle = color
             context.fillRect(0, 0, width, height)
         }
+
+        context.save()
+        if (camera) {
+            camera.translate(this.renderContext)
+        }
         this.elements.forEach(element => element.render(this.renderContext, gameContext))
+        context.restore()
     }
 }

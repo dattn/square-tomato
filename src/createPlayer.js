@@ -15,7 +15,9 @@ class Control extends Trait {
         if (input.isKeyDown('KeyA') || input.isKeyDown('ArrowLeft')) walk.left()
         if (input.isKeyDown('KeyS') || input.isKeyDown('ArrowDown')) walk.down()
         if (input.isKeyDown('KeyD') || input.isKeyDown('ArrowRight')) walk.right()
-        walk.lookAt.set(input.mousePosition)
+
+        entity.direction.rotate(input.mousePosition.x / 1000)
+        input.mousePosition.set(0, 0)
     }
 }
 
@@ -46,10 +48,9 @@ class RenderPlayer extends Trait {
 
 export default function createPlayer (sprite, input) {
     const player = new Entity()
-    player.position.set(100, 100)
     player.addTrait(new Control(input))
     const walk = new Walk()
-    walk.speed = 20
+    walk.speed = 15
     player.addTrait(walk)
     player.addTrait(new RenderPlayer(sprite))
     return player

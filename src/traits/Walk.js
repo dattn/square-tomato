@@ -5,14 +5,12 @@ export default class Walk extends Trait {
     constructor () {
         super()
         this.move = new Vector()
-        this.lookAt = new Vector()
         this.speed = 1
     }
 
     update (entity, gameContext) {
         const { move, speed, lookAt } = this
         const { velocity, position, direction } = entity
-        direction.set(lookAt).substract(position).angle()
         move.normalize().multiply(speed)
         velocity.add(move)
         move.set(0, 0)     

@@ -8,16 +8,23 @@ import Map from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
 import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
+import Camera from './Camera.js'
 
-(async () => {
+async function startGame (elementToReplace) {
     try {
+        const gameContainerElement = document.createElement('div')
+        gameContainerElement.classList.add('gameContainer')
+        elementToReplace.replaceWith(gameContainerElement)
+
+        gameContainerElement.requestPointerLock()
+
         const assetLoader = new AssetLoader()
         assetLoader.load('tiles', './assets/tiles.png', TYPE_IMAGE)
         assetLoader.load('tiles-config', './assets/tiles.json', TYPE_JSON)
         await assetLoader.ready()
 
         const renderer = new Renderer()
-        renderer.mount(document.getElementById('Game'))
+        renderer.mount(gameContainerElement)
 
         const renderLayer = new RenderLayer('gray')
         renderer.addLayer(renderLayer)
@@ -30,16 +37,20 @@ import createPlayer from './createPlayer.js'
             assetLoader.get('tiles-config')
         )
 
+        const camera = new Camera()
+
         const map = new Map()
         renderLayer.addElement(map)
+        renderLayer.useCamera(camera)
 
         const sprites = [ ...tilesSpriteSheet.sprites.values() ]
         const playerSprite = sprites[Math.floor(Math.random() * sprites.length)]
         
-        const keyboardMouse = new KeyboardMouse(renderer)
+        const keyboardMouse = new KeyboardMouse()
         const player = createPlayer(playerSprite, keyboardMouse)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
+
 
         const gameContext = {
             delta: null,
@@ -48,7 +59,8 @@ import createPlayer from './createPlayer.js'
             renderContext: null,
             spriteSheet: {
                 tiles: tilesSpriteSheet
-            }
+            },
+            camera
         }
 
         function update (delta, deltaInMs, time) {
@@ -62,6 +74,7 @@ import createPlayer from './createPlayer.js'
             gameContext.delta = delta
             gameContext.deltaInMs = deltaInMs
             gameContext.time = time
+            camera.followEntity(player, delta)
             renderer.render(gameContext)
         }
 
@@ -75,4 +88,8 @@ import createPlayer from './createPlayer.js'
         console.error('Unhandled Error:', err.message || err)
         console.error(err)
     }
-})()
+}
+
+const startButtonElement = document.getElementById('StartGame')
+startButtonElement.addEventListener('click', () => startGame(startButtonElement))
+startButtonElement.removeAttribute('disabled')

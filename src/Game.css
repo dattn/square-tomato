@@ -14,13 +14,13 @@ body {
     background: #000;
 }
 
-#Game {
+.gameContainer {
     position: relative;
     width: 100vmin;
     height: 100vmin;
 }
 
-#Game canvas {
+.gameContainer canvas {
     width: 100%;
     height: 100%;
     position: absolute;

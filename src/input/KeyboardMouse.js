@@ -6,8 +6,7 @@ mouseKeyMap.set(2, 'MouseMiddle')
 mouseKeyMap.set(3, 'MouseRight')
 
 export default class KeyboardMouse {
-    constructor (renderer) {
-        this.renderer = renderer
+    constructor () {
         this.keys = new Set()
         this.mousePosition = new Vector()
         window.addEventListener('keydown', evt => this.handleKeyDown(evt))
@@ -34,14 +33,10 @@ export default class KeyboardMouse {
     }
 
     handleMouseMove (evt) {
-        const { renderer, mousePosition } = this
-        const { clientX, clientY } = evt
-        if (renderer.mountTo) {
-            const { left, top } = renderer.mountTo.getBoundingClientRect()
-            mousePosition.set(clientX - left, clientY - top)
-        } else {
-            mousePosition.set(0, 0)
-        }
+        const { mousePosition } = this
+        const { movementX, movementY } = evt
+        mousePosition.x += movementX
+        mousePosition.y += movementY
     }
 
     isKeyDown (key) {
