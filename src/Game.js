@@ -24,7 +24,7 @@ async function startGame (elementToReplace) {
         const renderer = new Renderer()
         renderer.mount(gameContainerElement)
 
-        const renderLayer = new RenderLayer('gray')
+        const renderLayer = new RenderLayer('black')
         renderer.addLayer(renderLayer)
 
         const entityContainer = new EntityContainer()
@@ -37,13 +37,14 @@ async function startGame (elementToReplace) {
 
         const camera = new Camera()
 
-        const map = new Map()
+        const map = new Map(spriteSheet)
         renderLayer.addElement(map)
         renderLayer.useCamera(camera)
 
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouse()
         const player = createPlayer(playerSprite, keyboardMouse)
+        player.position.set(3000, 3000)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
 

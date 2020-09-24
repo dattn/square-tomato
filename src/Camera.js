@@ -8,8 +8,13 @@ export default class Camera {
     }
 
     followEntity (entity, delta) {
-        this.position.set(entity.lastPosition).lerp(entity.position, delta)
-        this.direction.set(entity.lastDirection).lerp(entity.direction, delta)
+        this.position
+            .set(entity.lastPosition)
+            .lerp(entity.position, delta)
+        this.direction
+            .set(entity.lastDirection)
+            .lerp(entity.direction, delta)
+            .normalize()
     }
 
     transform (renderContext) {

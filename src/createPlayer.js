@@ -41,7 +41,7 @@ class RenderPlayer extends Trait {
         context.save()
         context.translate(x, y)
         context.rotate(renderDirection.angle() - (Math.PI / 2))
-        context.drawImage(sprite, -32, -32)
+        context.drawImage(sprite, - sprite.width * 0.5, - sprite.height * 0.5)
         context.restore()
     }
 }

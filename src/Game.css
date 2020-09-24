@@ -16,8 +16,10 @@ body {
 
 .gameContainer {
     position: relative;
-    width: 100vmin;
-    height: 100vmin;
+    width: 95vmin;
+    height: 95vmin;
+    border: 5px solid #FFF;
+    box-sizing: border-box;
 }
 
 .gameContainer canvas {
