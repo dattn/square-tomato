@@ -1,3 +1,5 @@
+import Vector from './Vector.js'
+
 export default class Map {
     constructor(spriteSheet) {
         this.canvas = document.createElement('canvas')
@@ -16,19 +18,26 @@ export default class Map {
             ]
         }
 
+        this.tileSize = new Vector(64, 64)
+        this.countX = 100
+        this.countY = 100
+        this.width = this.tileSize.x * this.countX
+        this.height = this.tileSize.y * this.countY
+
         this.createMap()
     }
 
     createMap () {
-        const { context, canvas, sprites } = this
-        canvas.width = 64 * 100
-        canvas.height = 64 * 100
-        for (let x = 0; x < 100; x++) {
-            for (let y = 0; y < 100; y++) {
+        const { context, canvas, sprites, width, height, countX, countY, tileSize } = this
+        canvas.width = width
+        canvas.height = height
+        for (let x = 0; x < countX; x++) {
+            for (let y = 0; y < countY; y++) {
+                const sprite = sprites.grass[Math.floor(Math.random() * sprites.grass.length)]
                 context.drawImage(
-                    sprites.grass[Math.floor(Math.random() * sprites.grass.length)],
-                    0, 0, 64, 64,
-                    x * 64, y * 64, 64, 64
+                    sprite,
+                    0, 0, sprite.width, sprite.height,
+                    x * tileSize.x, y * tileSize.y, tileSize.x, tileSize.y
                 )
             }
         }
