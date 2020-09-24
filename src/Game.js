@@ -82,22 +82,20 @@ async function startGame (elementToReplace) {
             render
         })
 
+        const requestPointerLock = () => {
+            gameContainerElement.requestPointerLock()
+        }
         const handlePointerLockChange = () => {
-            const requestPointerLock = () => {
-                gameContainerElement.requestPointerLock()
-                gameContainerElement.removeEventListener('click', requestPointerLock)
-            }
             if (document.pointerLockElement === gameContainerElement) {
+                gameContainerElement.removeEventListener('click', requestPointerLock)
                 loop.start()
             } else {
                 loop.stop()
                 gameContainerElement.addEventListener('click', requestPointerLock)
             }
         }
-
-        window.addEventListener('pointerlockchange', handlePointerLockChange)
-
-        gameContainerElement.requestPointerLock()
+        document.addEventListener('pointerlockchange', handlePointerLockChange)
+        requestPointerLock()
     } catch (err) {
         console.error('Unhandled Error:', err.message || err)
         console.error(err)
