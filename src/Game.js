@@ -43,7 +43,7 @@ async function startGame (elementToReplace) {
 
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouse()
-        const player = createPlayer(playerSprite, keyboardMouse)
+        const player = createPlayer(playerSprite, keyboardMouse, map)
         player.position.set(3000, 3000)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)

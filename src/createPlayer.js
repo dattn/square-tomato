@@ -1,4 +1,5 @@
 import Entity, { Trait } from './Entity.js'
+import MapCollider from './traits/MapCollider.js'
 import Walk from './traits/Walk.js'
 import Vector from './Vector.js'
 
@@ -46,12 +47,13 @@ class RenderPlayer extends Trait {
     }
 }
 
-export default function createPlayer (sprite, input) {
+export default function createPlayer (sprite, input, map) {
     const player = new Entity()
     player.addTrait(new Control(input))
     const walk = new Walk()
     walk.speed = 15
     player.addTrait(walk)
+    player.addTrait(new MapCollider(map))
     player.addTrait(new RenderPlayer(sprite))
     return player
 }
