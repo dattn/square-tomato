@@ -17,8 +17,8 @@ async function startGame (elementToReplace) {
         elementToReplace.replaceWith(gameContainerElement)
         
         const assetLoader = new AssetLoader()
-        assetLoader.load('tiles', './assets/tiles.png', TYPE_IMAGE)
-        assetLoader.load('tiles-config', './assets/tiles.json', TYPE_JSON)
+        assetLoader.load('spritesheet', './assets/spritesheet.png', TYPE_IMAGE)
+        assetLoader.load('spritesheet-config', './assets/spritesheet.json', TYPE_JSON)
         await assetLoader.ready()
 
         const renderer = new Renderer()
@@ -30,9 +30,9 @@ async function startGame (elementToReplace) {
         const entityContainer = new EntityContainer()
         renderLayer.addElement(entityContainer)
 
-        const tilesSpriteSheet = new SpriteSheet(
-            assetLoader.get('tiles'),
-            assetLoader.get('tiles-config')
+        const spriteSheet = new SpriteSheet(
+            assetLoader.get('spritesheet'),
+            assetLoader.get('spritesheet-config')
         )
 
         const camera = new Camera()
@@ -41,9 +41,7 @@ async function startGame (elementToReplace) {
         renderLayer.addElement(map)
         renderLayer.useCamera(camera)
 
-        const sprites = [ ...tilesSpriteSheet.sprites.values() ]
-        const playerSprite = sprites[Math.floor(Math.random() * sprites.length)]
-        
+        const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouse()
         const player = createPlayer(playerSprite, keyboardMouse)
         entityContainer.addEntity(player)
@@ -55,9 +53,7 @@ async function startGame (elementToReplace) {
             deltaInMs: null,
             time: null,
             renderContext: null,
-            spriteSheet: {
-                tiles: tilesSpriteSheet
-            },
+            spriteSheet,
             camera
         }
 
