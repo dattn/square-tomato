@@ -8,8 +8,21 @@ export default class MapCollider extends Trait {
     }
 
     update (entity) {
-        const { position, lastPosition } = entity
+        const { position, velocity } = entity
+        const { radius, map } = this
 
-        // check collision against map borders
+        const x = position.x + velocity.x
+        if (x - radius < 0) {
+            velocity.x = -position.x + radius
+        } else if (x + radius > map.width) {
+            velocity.x = map.width - position.x - radius
+        }
+
+        const y = position.y + velocity.y
+        if (y - radius < 0) {
+            velocity.y = -position.y + radius
+        } else if (y + radius > map.height) {
+            velocity.y = map.height - position.y - radius
+        }
     }
 }
