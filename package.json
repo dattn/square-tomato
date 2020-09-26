@@ -2,6 +2,7 @@
     "name": "@dattn/square-tomato-dev",
     "private": true,
     "devDependencies": {
+        "eslint": "^7.9.0",
         "lerna": "^3.18.3"
     }
 }

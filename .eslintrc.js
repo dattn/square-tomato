@@ -1,29 +1,29 @@
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true,
-        'node': true
+    env: {
+        browser: true,
+        es2021: true,
+        node: true
     },
-    'extends': 'eslint:recommended',
-    'parserOptions': {
-        'ecmaVersion': 12,
-        'sourceType': 'module'
+    extends: 'eslint:recommended',
+    parserOptions: {
+        ecmaVersion: 12,
+        sourceType: 'module'
     },
-    'rules': {
-        'indent': [
+    rules: {
+        indent: [
             'error',
             4,
-            { 'SwitchCase': 1 }
+            { SwitchCase: 1 }
         ],
         'linebreak-style': [
             'error',
             'unix'
         ],
-        'quotes': [
+        quotes: [
             'error',
             'single'
         ],
-        'semi': [
+        semi: [
             'error',
             'never'
         ]

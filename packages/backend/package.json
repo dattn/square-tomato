@@ -11,5 +11,14 @@
     "license": "MIT",
     "type": "module",
     "main": "src/app.js",
-    "scripts": {}
+    "scripts": {
+        "app": "node src/app.js",
+        "dev": "nodemon src/app.js"
+    },
+    "dependencies": {
+        "koa": "^2.13.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4"
+    }
 }
