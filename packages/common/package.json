@@ -1,0 +1,13 @@
+{
+    "name": "@dattn/square-tomato-common",
+    "version": "0.1.0-dev",
+    "description": "Square Tomate Game",
+    "keywords": [],
+    "author": "Daniel Duton <daniel@duton.lu> (https://github.com/dattn)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dattn/square-tomato.git"
+    },
+    "license": "MIT",
+    "type": "module"
+}

@@ -1,0 +1,23 @@
+{
+    "name": "@dattn/square-tomato-frontend",
+    "version": "0.1.0-dev",
+    "description": "Square Tomate Game",
+    "keywords": [],
+    "author": "Daniel Duton <daniel@duton.lu> (https://github.com/dattn)",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/dattn/square-tomato.git"
+    },
+    "license": "MIT",
+    "main": "src/Game.js",
+    "scripts": {
+        "serve": "vite serve",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "eslint": "^7.9.0",
+        "koa-mount": "^4.0.0",
+        "koa-static": "^5.0.0",
+        "vite": "^1.0.0-rc.4"
+    }
+}
