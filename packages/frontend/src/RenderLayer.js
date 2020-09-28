@@ -79,6 +79,7 @@ export default class RenderLayer {
             visibleRect.width = width
             visibleRect.height = height
         }
+
         this.elements.forEach(element => element.render(this.renderContext, gameContext))
         context.restore()
     }

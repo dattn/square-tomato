@@ -4,7 +4,7 @@ import Renderer from './Renderer.js'
 import GameLoop from './GameLoop.js'
 import RenderLayer from './RenderLayer.js'
 import EntityContainer from './EntityContainer.js'
-import Map from './Map.js'
+import GameMap from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
 import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
@@ -37,31 +37,44 @@ async function startGame (elementToReplace) {
         )
 
         const camera = new Camera()
-        const ws = new WebSocket('ws://localhost:3100/ws')
-        ws.onmessage = async ({ data }) => {
-            const buffer = await data.arrayBuffer()
-            const view = new DataView(buffer)
-            console.log({
-                id: view.getInt8(0),
-                positionX: view.getFloat32(1),
-                positionY: view.getFloat32(5),
-                directionX: view.getFloat32(9),
-                directionY: view.getFloat32(13)
-            })
-        }
-
-        const map = new Map(spriteSheet)
+        const map = new GameMap(spriteSheet)
         renderLayer.addElement(map)
         renderLayer.useCamera(camera)
 
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouse()
-        const player = createPlayer(playerSprite, keyboardMouse, map)
+        const player = createPlayer(playerSprite, map)
         player.addTrait(new ControlTrait(keyboardMouse))
         player.position.set(3000, 3000)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
 
+        const remotePlayers = new Map()
+        const ws = new WebSocket('ws://localhost:3100/ws')
+        ws.onmessage = async ({ data }) => {
+            const buffer = await data.arrayBuffer()
+            const view = new DataView(buffer)
+            const id = view.getInt8(0)
+            const positionX = view.getFloat32(1)
+            const positionY = view.getFloat32(5)
+            const directionX = view.getFloat32(9)
+            const directionY = view.getFloat32(13)
+        
+            let player
+            if (!remotePlayers.has(id)) {
+                player = createPlayer(playerSprite, map)
+                remotePlayers.set(id, player)
+                entityContainer.addEntity(player)
+                renderLayer.addElement(player)
+                player.lastPosition.set(positionX, positionY)
+                player.lastDirection.set(directionX, directionY)
+            } else {
+                player = remotePlayers.get(id)
+            }
+
+            player.position.set(positionX, positionY)
+            player.direction.set(directionX, directionY)
+        }
 
         const gameContext = {
             delta: null,
@@ -72,17 +85,17 @@ async function startGame (elementToReplace) {
             camera
         }
 
-        const sendData = new Float32Array(4)
         const update = (delta, deltaInMs, time) => {
             gameContext.delta = delta
             gameContext.deltaInMs = deltaInMs
             gameContext.time = time
             entityContainer.update(gameContext)
+            const sendData = new Float32Array(4)
             sendData[0] = player.position.x
             sendData[1] = player.position.y
             sendData[2] = player.direction.x
             sendData[3] = player.direction.y
-            ws.send(sendData)
+            ws.send(sendData.buffer)
         }
 
         const render = (delta, deltaInMs, time) => {
