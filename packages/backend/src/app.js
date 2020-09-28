@@ -23,9 +23,9 @@ function toArrayBuffer(buffer) {
 }
 
 wss.on('connection', ws => {
-    clients.set(ws, {
-        id: NEXT_CLIENT_ID++
-    })
+    const id = NEXT_CLIENT_ID % 255
+    NEXT_CLIENT_ID++
+    clients.set(ws, { id })
     ws.on('close', () => {
         clients.delete(ws)
     })
