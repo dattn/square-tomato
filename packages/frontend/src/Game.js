@@ -9,6 +9,7 @@ import SpriteSheet from './SpriteSheet.js'
 import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
 import Camera from './Camera.js'
+import ControlTrait from './traits/Control.js'
 
 async function startGame (elementToReplace) {
     try {
@@ -56,6 +57,7 @@ async function startGame (elementToReplace) {
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouse()
         const player = createPlayer(playerSprite, keyboardMouse, map)
+        player.addTrait(new ControlTrait(keyboardMouse))
         player.position.set(3000, 3000)
         entityContainer.addEntity(player)
         renderLayer.addElement(player)
