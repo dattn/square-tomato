@@ -5,5 +5,8 @@ export default {
     plugins: [
         GameHeaders(),
         ServeAssetsPlugin()
-    ]
+    ],
+    proxy: {
+        '/assets': 'http://localhost:3100/assets'
+    }
 }
