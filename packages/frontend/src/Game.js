@@ -50,7 +50,10 @@ async function startGame (elementToReplace) {
         renderLayer.addElement(player)
 
         const remotePlayers = new Map()
+        let wsIsConnected = false
         const ws = new WebSocket('ws://localhost:3100/ws')
+        ws.onopen = () => { wsIsConnected = true }
+        ws.onclose = () => { wsIsConnected = false }
         ws.onmessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
@@ -85,17 +88,19 @@ async function startGame (elementToReplace) {
             camera
         }
 
+        const sendData = new Float32Array(4)
         const update = (delta, deltaInMs, time) => {
             gameContext.delta = delta
             gameContext.deltaInMs = deltaInMs
             gameContext.time = time
             entityContainer.update(gameContext)
-            const sendData = new Float32Array(4)
-            sendData[0] = player.position.x
-            sendData[1] = player.position.y
-            sendData[2] = player.direction.x
-            sendData[3] = player.direction.y
-            ws.send(sendData.buffer)
+            if (wsIsConnected) {
+                sendData[0] = player.position.x
+                sendData[1] = player.position.y
+                sendData[2] = player.direction.x
+                sendData[3] = player.direction.y
+                ws.send(sendData)
+            }
         }
 
         const render = (delta, deltaInMs, time) => {
