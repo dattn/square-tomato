@@ -10,16 +10,36 @@ const wss = new WebSocket.Server({
     perMessageDeflate: false
 })
 
-const clients = new Set()
+let NEXT_CLIENT_ID = 1
+const clients = new Map()
+
+function toArrayBuffer(buffer) {
+    var ab = new ArrayBuffer(buffer.length)
+    var view = new Uint8Array(ab)
+    for (var i = 0; i < buffer.length; ++i) {
+        view[i] = buffer[i]
+    }
+    return ab
+}
 
 wss.on('connection', ws => {
-    clients.add(ws)
+    clients.set(ws, {
+        id: NEXT_CLIENT_ID++
+    })
     ws.on('close', () => {
         clients.delete(ws)
     })
 
     ws.on('message', buffer => {
-        clients.forEach(client => client.send(buffer))
+        const data = new Float32Array(toArrayBuffer(buffer))
+        const sendBuffer = new ArrayBuffer(17)
+        const view = new DataView(sendBuffer)
+        data.forEach((value, index) => view.setFloat32(1 + (4 * index), value)) 
+
+        clients.forEach(({ id }, client) => {
+            view.setInt8(0, id)
+            client.send(sendBuffer)
+        })
     })
 })
 

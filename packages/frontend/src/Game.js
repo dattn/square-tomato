@@ -39,7 +39,14 @@ async function startGame (elementToReplace) {
         const ws = new WebSocket('ws://localhost:3100/ws')
         ws.onmessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
-            console.log(new Float32Array(buffer))
+            const view = new DataView(buffer)
+            console.log({
+                id: view.getInt8(0),
+                positionX: view.getFloat32(1),
+                positionY: view.getFloat32(5),
+                directionX: view.getFloat32(9),
+                directionY: view.getFloat32(13)
+            })
         }
 
         const map = new Map(spriteSheet)
