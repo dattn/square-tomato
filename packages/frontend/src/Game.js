@@ -10,6 +10,8 @@ import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
 import Camera from './Camera.js'
 import ControlTrait from './traits/Control.js'
+import RemoteTrait from './traits/Remote.js'
+import Remote from './traits/Remote.js'
 
 async function startGame (elementToReplace) {
     try {
@@ -58,25 +60,24 @@ async function startGame (elementToReplace) {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
             const id = view.getInt8(0)
-            const positionX = view.getFloat32(1)
-            const positionY = view.getFloat32(5)
-            const directionX = view.getFloat32(9)
-            const directionY = view.getFloat32(13)
         
             let player
             if (!remotePlayers.has(id)) {
                 player = createPlayer(playerSprite, map)
+                player.addTrait(new RemoteTrait(id))
                 remotePlayers.set(id, player)
                 entityContainer.addEntity(player)
                 renderLayer.addElement(player)
-                player.lastPosition.set(positionX, positionY)
-                player.lastDirection.set(directionX, directionY)
             } else {
                 player = remotePlayers.get(id)
             }
 
-            player.position.set(positionX, positionY)
-            player.direction.set(directionX, directionY)
+            player.getTrait(Remote).addData({
+                positionX: view.getFloat32(1),
+                positionY: view.getFloat32(5),
+                directionX: view.getFloat32(9),
+                directionY: view.getFloat32(13)
+            })
         }
 
         const gameContext = {
@@ -116,6 +117,7 @@ async function startGame (elementToReplace) {
             update,
             render
         })
+        loop.start()
 
         const requestPointerLock = () => {
             gameContainerElement.requestPointerLock()
@@ -123,9 +125,9 @@ async function startGame (elementToReplace) {
         const handlePointerLockChange = () => {
             if (document.pointerLockElement === gameContainerElement) {
                 gameContainerElement.removeEventListener('click', requestPointerLock)
-                loop.start()
+                keyboardMouse.enable()
             } else {
-                loop.stop()
+                keyboardMouse.disable()
                 gameContainerElement.addEventListener('click', requestPointerLock)
             }
         }

@@ -9,11 +9,32 @@ export default class KeyboardMouse {
     constructor () {
         this.keys = new Set()
         this.mousePosition = new Vector()
-        window.addEventListener('keydown', evt => this.handleKeyDown(evt))
-        window.addEventListener('keyup', evt => this.handleKeyUp(evt))
-        window.addEventListener('mousedown', evt => this.handleMouseDown(evt))
-        window.addEventListener('mouseup', evt => this.handleMouseUp(evt))
-        window.addEventListener('mousemove', evt => this.handleMouseMove(evt))
+
+        this.handleKeyDown = this.handleKeyDown.bind(this)
+        this.handleKeyUp = this.handleKeyUp.bind(this)
+        this.handleMouseDown = this.handleMouseDown.bind(this)
+        this.handleMouseUp = this.handleMouseUp.bind(this)
+        this.handleMouseMove = this.handleMouseMove.bind(this)
+    }
+
+    enable () {
+        this.keys.clear()
+        this.mousePosition.set(0, 0)
+        window.addEventListener('keydown', this.handleKeyDown)
+        window.addEventListener('keyup', this.handleKeyUp)
+        window.addEventListener('mousedown', this.handleMouseDown)
+        window.addEventListener('mouseup', this.handleMouseUp)
+        window.addEventListener('mousemove', this.handleMouseMove)
+    }
+
+    disable () {
+        this.keys.clear()
+        this.mousePosition.set(0, 0)
+        window.removeEventListener('keydown', this.handleKeyDown)
+        window.removeEventListener('keyup', this.handleKeyUp)
+        window.removeEventListener('mousedown', this.handleMouseDown)
+        window.removeEventListener('mouseup', this.handleMouseUp)
+        window.removeEventListener('mousemove', this.handleMouseMove)
     }
 
     handleKeyDown (evt) {
