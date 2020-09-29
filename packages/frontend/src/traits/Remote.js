@@ -14,7 +14,7 @@ export default class Remote extends Trait {
     }
 
     update(entity) {
-        if (this.dataCount > 4) {
+        if (this.dataCount > 2) {
             let data = this.dataStack.shift()
             if (data) {
                 const {
