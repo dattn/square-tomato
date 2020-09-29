@@ -59,7 +59,7 @@ async function startGame (elementToReplace) {
         ws.onmessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
-            const id = view.getInt8(0)
+            const id = view.getUint8(0)
         
             let player
             if (!remotePlayers.has(id)) {

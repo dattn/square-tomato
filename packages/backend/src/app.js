@@ -49,8 +49,8 @@ wss.on('connection', ws => {
             if (client !== ws) {
                 const sendBuffer = new ArrayBuffer(17)
                 const view = new DataView(sendBuffer)
+                view.setUint8(0, id)
                 data.forEach((value, index) => view.setFloat32(1 + (4 * index), value)) 
-                view.setInt8(0, id)
                 client.send(sendBuffer)
             }
         })
