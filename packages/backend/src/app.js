@@ -51,7 +51,7 @@ wss.on('connection', ws => {
                 const view = new DataView(sendBuffer)
                 view.setUint8(0, id)
                 data.forEach((value, index) => view.setFloat32(1 + (4 * index), value)) 
-                client.send(sendBuffer)
+                client.send(view.buffer, { binary: true })
             }
         })
     })
