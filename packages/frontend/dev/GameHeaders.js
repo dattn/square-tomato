@@ -1,5 +1,3 @@
-import path from 'path'
-
 export default () => ({
     configureServer: ({ app }) => {
         app.use(async (ctx, next) => {
