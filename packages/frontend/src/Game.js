@@ -64,6 +64,14 @@ async function startGame (elementToReplace) {
 
         const remotePlayers = new Map()
 
+        const removeRemotePlayers = () => {
+            remotePlayers.forEach((player, id) => {
+                entityContainer.removeEntity(player)
+                renderLayer.removeElement(player)
+                remotePlayers.delete(id)
+            })
+        }
+
         const wsMessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
@@ -96,6 +104,9 @@ async function startGame (elementToReplace) {
             ws.removeEventListener('close', wsClose)
             ws.removeEventListener('message', wsMessage)
             wsIsConnected = false
+
+            removeRemotePlayers()
+
             setTimeout(() => {
                 ws = null
                 connectWebSocket()
