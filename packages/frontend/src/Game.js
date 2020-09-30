@@ -63,11 +63,8 @@ async function startGame (elementToReplace) {
         renderLayer.addElement(player)
 
         const remotePlayers = new Map()
-        let wsIsConnected = false
-        const ws = new WebSocket(getWsUrl())
-        ws.onopen = () => { wsIsConnected = true }
-        ws.onclose = () => { wsIsConnected = false }
-        ws.onmessage = async ({ data }) => {
+
+        const wsMessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
             const id = view.getUint8(0)
@@ -90,6 +87,30 @@ async function startGame (elementToReplace) {
                 directionY: view.getFloat32(13)
             })
         }
+
+        let ws = null
+        let wsIsConnected = false
+        const wsOpen = () => { wsIsConnected = true }
+        const wsClose = () => {
+            ws.removeEventListener('open', wsOpen)
+            ws.removeEventListener('close', wsClose)
+            ws.removeEventListener('message', wsMessage)
+            wsIsConnected = false
+            setTimeout(() => {
+                ws = null
+                connectWebSocket()
+            }, 2000)
+        }
+
+        const connectWebSocket = () => {
+            if (!ws) {
+                ws = new WebSocket(getWsUrl())
+                ws.addEventListener('open', wsOpen)
+                ws.addEventListener('close', wsClose)
+                ws.addEventListener('message', wsMessage)
+            }
+        }
+        connectWebSocket()
 
         const gameContext = {
             delta: null,
