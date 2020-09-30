@@ -23,8 +23,25 @@ const frontendPath = path.resolve('../frontend/dist')
 app.use(mount('/', serve(frontendPath)))
 app.use(mount('/assets', serve(path.resolve('src/assets'))))
 
-let NEXT_CLIENT_ID = 1
+let NEXT_CLIENT_ID = 0
 const clients = new Map()
+const idsInUse = new Set()
+
+function icrementNextId () {
+    NEXT_CLIENT_ID = (NEXT_CLIENT_ID + 1) % 256
+}
+
+function getNextId() {
+    if (idsInUse.size === 256) {
+        return null
+    }
+    while (idsInUse.has(NEXT_CLIENT_ID)) {
+        icrementNextId()
+    }
+    let id = NEXT_CLIENT_ID
+    icrementNextId()
+    return id
+}
 
 function toArrayBuffer(buffer) {
     var ab = new ArrayBuffer(buffer.length)
@@ -36,10 +53,12 @@ function toArrayBuffer(buffer) {
 }
 
 wss.on('connection', ws => {
-    const id = NEXT_CLIENT_ID % 255
-    NEXT_CLIENT_ID++
+    const id = getNextId()
+    idsInUse.add(id)
     clients.set(ws, { id })
+
     ws.on('close', () => {
+        idsInUse.delete(id)
         clients.delete(ws)
     })
 
