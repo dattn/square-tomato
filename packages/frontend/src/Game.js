@@ -13,6 +13,17 @@ import ControlTrait from './traits/Control.js'
 import RemoteTrait from './traits/Remote.js'
 import Remote from './traits/Remote.js'
 
+function getWsUrl () {
+    if (import.meta.env?.VITE_WS_URL) {
+        return import.meta.env?.VITE_WS_URL
+    }
+    const uri = `${window.location.host}/ws`
+    if (window.location.protocol === 'https:') {
+        return `wss://${uri}`
+    }
+    return `ws://${uri}`
+}
+
 async function startGame (elementToReplace) {
     try {
         const gameContainerElement = document.createElement('div')
@@ -53,7 +64,7 @@ async function startGame (elementToReplace) {
 
         const remotePlayers = new Map()
         let wsIsConnected = false
-        const ws = new WebSocket('ws://localhost:3100/ws')
+        const ws = new WebSocket(getWsUrl())
         ws.onopen = () => { wsIsConnected = true }
         ws.onclose = () => { wsIsConnected = false }
         ws.onmessage = async ({ data }) => {

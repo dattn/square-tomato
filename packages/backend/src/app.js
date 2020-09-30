@@ -45,7 +45,8 @@ wss.on('connection', ws => {
 
     ws.on('message', buffer => {
         const data = new Float32Array(toArrayBuffer(buffer))
-        clients.forEach(({ id }, client) => {
+        const { id } = clients.get(ws)
+        clients.forEach((_, client) => {
             if (client !== ws) {
                 const sendBuffer = new ArrayBuffer(17)
                 const view = new DataView(sendBuffer)
