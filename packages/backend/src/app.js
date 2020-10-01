@@ -65,12 +65,12 @@ wss.on('connection', ws => {
     ws.on('message', buffer => {
         const data = new Float32Array(toArrayBuffer(buffer))
         const { id } = clients.get(ws)
+        const sendBuffer = new ArrayBuffer(17)
+        const view = new DataView(sendBuffer)
+        view.setUint8(0, id)
+        data.forEach((value, index) => view.setFloat32(1 + (4 * index), value)) 
         clients.forEach((_, client) => {
             if (client !== ws) {
-                const sendBuffer = new ArrayBuffer(17)
-                const view = new DataView(sendBuffer)
-                view.setUint8(0, id)
-                data.forEach((value, index) => view.setFloat32(1 + (4 * index), value)) 
                 client.send(view.buffer, { binary: true })
             }
         })
