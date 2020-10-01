@@ -72,11 +72,8 @@ async function startGame (elementToReplace) {
             })
         }
 
-        const wsMessage = async ({ data }) => {
-            const buffer = await data.arrayBuffer()
-            const view = new DataView(buffer)
-            const id = view.getUint8(0)
-        
+        const handleRemotePlayerUpdate = (view) => {
+            const id = view.getUint8(1)
             let player
             if (!remotePlayers.has(id)) {
                 player = createPlayer(playerSprite, map)
@@ -89,11 +86,23 @@ async function startGame (elementToReplace) {
             }
 
             player.getTrait(Remote).addData({
-                positionX: view.getFloat32(1),
-                positionY: view.getFloat32(5),
-                directionX: view.getFloat32(9),
-                directionY: view.getFloat32(13)
+                positionX: view.getFloat32(2),
+                positionY: view.getFloat32(6),
+                directionX: view.getFloat32(10),
+                directionY: view.getFloat32(14)
             })
+        }
+
+        const wsMessage = async ({ data }) => {
+            const buffer = await data.arrayBuffer()
+            const view = new DataView(buffer)
+            const type = view.getUint8(0)
+
+            switch (type) {
+                case 0:
+                    handleRemotePlayerUpdate(view)
+                    break
+            }
         }
 
         let ws = null
