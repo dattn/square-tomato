@@ -52,14 +52,32 @@ function toArrayBuffer(buffer) {
     return ab
 }
 
+function sendToAllClients(ws, buffer) {
+    clients.forEach((_, client) => {
+        if (client !== ws) {
+            client.send(buffer, { binary: true })
+        }
+    })
+}
+
 wss.on('connection', ws => {
     const id = getNextId()
     idsInUse.add(id)
     clients.set(ws, { id })
 
+    const statusBuffer = new ArrayBuffer(3)
+    const data = new Uint8Array(statusBuffer)
+    data[0] = 1
+    data[1] = 0
+    data[2] = id
+    sendToAllClients(ws, statusBuffer)
+
     ws.on('close', () => {
         idsInUse.delete(id)
         clients.delete(ws)
+
+        data[1] = 1
+        sendToAllClients(ws, statusBuffer)
     })
 
     ws.on('message', buffer => {
@@ -70,11 +88,7 @@ wss.on('connection', ws => {
         view.setUint8(0, 0)
         view.setUint8(1, id)
         data.forEach((value, index) => view.setFloat32(2 + (4 * index), value)) 
-        clients.forEach((_, client) => {
-            if (client !== ws) {
-                client.send(view.buffer, { binary: true })
-            }
-        })
+        sendToAllClients(ws, sendBuffer)
     })
 })
 

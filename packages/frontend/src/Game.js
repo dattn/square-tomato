@@ -64,15 +64,20 @@ async function startGame (elementToReplace) {
 
         const remotePlayers = new Map()
 
+        const removeRemotePlayer = id => {
+            const player = remotePlayers.get(id)
+            entityContainer.removeEntity(player)
+            renderLayer.removeElement(player)
+            remotePlayers.delete(id)
+        }
+
         const removeRemotePlayers = () => {
-            remotePlayers.forEach((player, id) => {
-                entityContainer.removeEntity(player)
-                renderLayer.removeElement(player)
-                remotePlayers.delete(id)
+            remotePlayers.forEach((_, id) => {
+                removeRemotePlayer(id)
             })
         }
 
-        const handleRemotePlayerUpdate = (view) => {
+        const handleRemotePlayerPositionUpdate = view => {
             const id = view.getUint8(1)
             let player
             if (!remotePlayers.has(id)) {
@@ -93,6 +98,18 @@ async function startGame (elementToReplace) {
             })
         }
 
+        const handleRemotePlayerConnectionUpdate = view => {
+            const type = view.getUint8(1)
+            const id = view.getUint8(2)
+            switch (type) {
+                case 0: // connected
+                    break
+                case 1: // disconnected
+                    removeRemotePlayer(id)
+                    break
+            }
+        }
+
         const wsMessage = async ({ data }) => {
             const buffer = await data.arrayBuffer()
             const view = new DataView(buffer)
@@ -100,7 +117,10 @@ async function startGame (elementToReplace) {
 
             switch (type) {
                 case 0:
-                    handleRemotePlayerUpdate(view)
+                    handleRemotePlayerPositionUpdate(view)
+                    break
+                case 1:
+                    handleRemotePlayerConnectionUpdate(view)
                     break
             }
         }
