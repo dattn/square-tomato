@@ -65,13 +65,20 @@ import path from 'path'
     wss.on('connection', ws => {
         const id = getNextId()
         idsInUse.add(id)
-        clients.set(ws, { id })
+        clients.set(ws, { id, lastSendPositionData: null })
 
         const statusBuffer = new ArrayBuffer(3)
         const data = new Uint8Array(statusBuffer)
         data[0] = 1
         data[1] = id
         sendToAllClients(ws, statusBuffer)
+
+        // send currently connected player positions
+        clients.forEach(({ lastSendPositionData }, client) => {
+            if (client !== ws && lastSendPositionData) {
+                ws.send(lastSendPositionData, { binary: true })
+            }
+        })
 
         ws.on('close', () => {
             idsInUse.delete(id)
@@ -83,12 +90,13 @@ import path from 'path'
 
         ws.on('message', buffer => {
             const data = new Float32Array(toArrayBuffer(buffer))
-            const { id } = clients.get(ws)
+            const clientData = clients.get(ws)
             const sendBuffer = new ArrayBuffer(18)
             const view = new DataView(sendBuffer)
             view.setUint8(0, 0)
-            view.setUint8(1, id)
+            view.setUint8(1, clientData.id)
             data.forEach((value, index) => view.setFloat32(2 + (4 * index), value))
+            clientData.lastSendPositionData = sendBuffer
             sendToAllClients(ws, sendBuffer)
         })
     })
