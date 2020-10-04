@@ -70,15 +70,14 @@ import path from 'path'
         const statusBuffer = new ArrayBuffer(3)
         const data = new Uint8Array(statusBuffer)
         data[0] = 1
-        data[1] = 0
-        data[2] = id
+        data[1] = id
         sendToAllClients(ws, statusBuffer)
 
         ws.on('close', () => {
             idsInUse.delete(id)
             clients.delete(ws)
 
-            data[1] = 1
+            data[0] = 2
             sendToAllClients(ws, statusBuffer)
         })
 

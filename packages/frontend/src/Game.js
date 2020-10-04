@@ -98,16 +98,13 @@ async function startGame (elementToReplace) {
             })
         }
 
-        const handleRemotePlayerConnectionUpdate = view => {
-            const type = view.getUint8(1)
-            const id = view.getUint8(2)
-            switch (type) {
-                case 0: // connected
-                    break
-                case 1: // disconnected
-                    removeRemotePlayer(id)
-                    break
-            }
+        const handleRemotePlayerConnect = view => {
+            const id = view.getUint8(1)
+        }
+
+        const handleRemotePlayerDisconnect = view => {
+            const id = view.getUint8(1)
+            removeRemotePlayer(id)
         }
 
         const wsMessage = async ({ data }) => {
@@ -120,7 +117,10 @@ async function startGame (elementToReplace) {
                     handleRemotePlayerPositionUpdate(view)
                     break
                 case 1:
-                    handleRemotePlayerConnectionUpdate(view)
+                    handleRemotePlayerConnect(view)
+                    break
+                case 2:
+                    handleRemotePlayerDisconnect(view)
                     break
             }
         }
