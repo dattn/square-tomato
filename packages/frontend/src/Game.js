@@ -29,7 +29,7 @@ async function startGame (elementToReplace) {
         const gameContainerElement = document.createElement('div')
         gameContainerElement.classList.add('gameContainer')
         elementToReplace.replaceWith(gameContainerElement)
-        
+
         const assetLoader = new AssetLoader()
         assetLoader.load('spritesheet', './assets/spritesheet.png', TYPE_IMAGE)
         assetLoader.load('spritesheet-config', './assets/spritesheet.json', TYPE_JSON)

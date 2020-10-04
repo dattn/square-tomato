@@ -12,10 +12,11 @@
     "type": "module",
     "main": "src/app.js",
     "scripts": {
-        "app": "node src/app.js",
-        "dev": "nodemon src/app.js"
+        "app": "node --experimental-import-meta-resolve src/app.js",
+        "dev": "nodemon --experimental-import-meta-resolve src/app.js"
     },
     "dependencies": {
+        "@dattn/square-tomato-frontend": "^0.1.0-dev",
         "koa": "^2.13.0",
         "koa-mount": "^4.0.0",
         "koa-static": "^5.0.0",
