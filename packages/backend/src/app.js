@@ -64,6 +64,11 @@ import path from 'path'
 
     wss.on('connection', ws => {
         const id = getNextId()
+        if (id === null) {
+            ws.close(1005, 'Server is full')
+            return
+        }
+
         idsInUse.add(id)
         clients.set(ws, { id, lastSendPositionData: null })
 
