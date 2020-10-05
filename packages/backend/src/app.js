@@ -67,7 +67,7 @@ import path from 'path'
         idsInUse.add(id)
         clients.set(ws, { id, lastSendPositionData: null })
 
-        const statusBuffer = new ArrayBuffer(3)
+        const statusBuffer = new ArrayBuffer(2)
         const data = new Uint8Array(statusBuffer)
         data[0] = 1
         data[1] = id
