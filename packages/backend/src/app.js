@@ -72,6 +72,8 @@ import path from 'path'
         idsInUse.add(id)
         clients.set(ws, { id, lastSendPositionData: null })
 
+        console.log(`${clients.size} players online`)
+
         const statusBuffer = new ArrayBuffer(2)
         const data = new Uint8Array(statusBuffer)
         data[0] = 1
@@ -88,6 +90,8 @@ import path from 'path'
         ws.on('close', () => {
             idsInUse.delete(id)
             clients.delete(ws)
+
+            console.log(`${clients.size} players online`)
 
             data[0] = 2
             sendToAllClients(ws, statusBuffer)
