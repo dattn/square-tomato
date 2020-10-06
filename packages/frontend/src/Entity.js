@@ -17,7 +17,7 @@ export default class Entity {
 
         this.lastVelocity = new Vector()
         this.velocity = new Vector()
-        
+
         this.lastDirection = new Vector(0, -1)
         this.direction = new Vector(0, -1)
     }
