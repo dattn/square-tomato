@@ -21,11 +21,14 @@ export default class Remote extends Trait {
                 directionX,
                 directionY
             } = this.dataStack[0]
+            if (this.dataCount > 2) {
+                this.dataStack.shift()
+            } else {
+                entity.lastPosition.set(positionX, positionY)
+                entity.lastDirection.set(directionX, directionY)
+            }
             entity.position.set(positionX, positionY)
             entity.direction.set(directionX, directionY)
-        }
-        if (this.dataCount > 2) {
-            this.dataStack.shift()
         }
     }
 }
