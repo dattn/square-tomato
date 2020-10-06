@@ -32,7 +32,6 @@ export default class Entity {
 
     update (gameContext) {
         const { position, velocity, lastPosition, lastVelocity, traits, direction, lastDirection } = this
-        const { delta } = gameContext
 
         lastPosition.set(position)
         lastVelocity.set(velocity)
@@ -40,8 +39,8 @@ export default class Entity {
         velocity.set(0, 0)
 
         traits.forEach(trait => trait.update(this, gameContext))
-        position.x += velocity.x * delta
-        position.y += velocity.y * delta
+        position.x += velocity.x
+        position.y += velocity.y
     }
 
     render (renderContext, gameContext) {
