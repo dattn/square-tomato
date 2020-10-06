@@ -1,15 +1,16 @@
 import { Trait } from '../Entity.js'
+import EntityCollider from './EntityCollider.js'
 
 export default class MapCollider extends Trait {
     constructor (map) {
         super()
-        this.radius = 10
         this.map = map
     }
 
     update (entity) {
         const { position, velocity } = entity
-        const { radius, map } = this
+        const { map } = this
+        const { radius } = entity.getTrait(EntityCollider)
 
         const x = position.x + velocity.x
         if (x - radius < 0) {
