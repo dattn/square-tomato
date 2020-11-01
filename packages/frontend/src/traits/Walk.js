@@ -13,7 +13,7 @@ export default class Walk extends Trait {
         const { velocity, direction } = entity
         move.normalize().multiply(speed).rotate(direction.angle())
         velocity.add(move)
-        move.set(0, 0)     
+        move.set(0, 0)
     }
 
     up () {

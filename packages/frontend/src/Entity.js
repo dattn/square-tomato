@@ -4,7 +4,6 @@ let NEXT_ID = 1
 
 export class Trait {
     update (/* entity, gameContext */) {}
-    render (/* entity, renderContext, gameContext */) {}
 }
 
 export default class Entity {
@@ -43,7 +42,5 @@ export default class Entity {
         position.y += velocity.y
     }
 
-    render (renderContext, gameContext) {
-        this.traits.forEach(trait => trait.render(this, renderContext, gameContext))
-    }
+    render (/* renderContext, gameContext */) {}
 }
