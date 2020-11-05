@@ -14,9 +14,6 @@ import RemoteTrait from './traits/Remote.js'
 import Remote from './traits/Remote.js'
 
 function getWsUrl () {
-    if (import.meta.env?.VITE_WS_URL) {
-        return import.meta.env?.VITE_WS_URL
-    }
     const uri = `${window.location.host}/ws`
     if (window.location.protocol === 'https:') {
         return `wss://${uri}`
