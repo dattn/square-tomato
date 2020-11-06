@@ -16,5 +16,8 @@
     },
     "devDependencies": {
         "vite": "^1.0.0-rc.9"
+    },
+    "dependencies": {
+        "@dattn/square-tomato-common": "^0.1.0-dev"
     }
 }

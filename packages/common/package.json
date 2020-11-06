@@ -1,5 +1,5 @@
 {
-    "name": "@dattn/square-tomato-engine",
+    "name": "@dattn/square-tomato-common",
     "version": "0.1.0-dev",
     "description": "Square Tomato Game",
     "keywords": [],
@@ -9,5 +9,6 @@
         "url": "https://github.com/dattn/square-tomato.git"
     },
     "license": "MIT",
+    "main": "src/lib.js",
     "type": "module"
 }

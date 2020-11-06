@@ -3,15 +3,11 @@ import AssetLoader, { TYPE_IMAGE, TYPE_JSON } from './AssetLoader.js'
 import Renderer from './Renderer.js'
 import GameLoop from './GameLoop.js'
 import RenderLayer from './RenderLayer.js'
-import EntityContainer from './EntityContainer.js'
+import { EntityContainer, KeyboardMouseInput, ControlTrait, RemoteTrait } from '@dattn/square-tomato-common'
 import GameMap from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
-import KeyboardMouse from './input/KeyboardMouse.js'
 import createPlayer from './createPlayer.js'
 import Camera from './Camera.js'
-import ControlTrait from './traits/Control.js'
-import RemoteTrait from './traits/Remote.js'
-import Remote from './traits/Remote.js'
 
 function getWsUrl () {
     const uri = `${window.location.host}/ws`
@@ -52,7 +48,7 @@ async function startGame (elementToReplace) {
         renderLayer.useCamera(camera)
 
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
-        const keyboardMouse = new KeyboardMouse()
+        const keyboardMouse = new KeyboardMouseInput()
         const player = createPlayer(playerSprite, map)
         player.addTrait(new ControlTrait(keyboardMouse))
         player.position.set(3000, 3000)
@@ -87,7 +83,7 @@ async function startGame (elementToReplace) {
                 player = remotePlayers.get(id)
             }
 
-            player.getTrait(Remote).addData({
+            player.getTrait(RemoteTrait).addData({
                 positionX: view.getFloat32(2),
                 positionY: view.getFloat32(6),
                 directionX: view.getFloat32(10),

@@ -1,4 +1,4 @@
-import Vector from './Vector.js'
+import { Vector } from '@dattn/square-tomato-common'
 
 export default class Map {
     constructor(spriteSheet) {

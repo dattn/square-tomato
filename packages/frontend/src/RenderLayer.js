@@ -1,4 +1,4 @@
-import Rect from './Rect.js'
+import { Rect } from '@dattn/square-tomato-common'
 
 export default class RenderLayer {
     constructor (color = null) {

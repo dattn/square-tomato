@@ -1,7 +1,4 @@
-import Entity from './Entity.js'
-import MapCollider from './traits/MapCollider.js'
-import Walk from './traits/Walk.js'
-import Vector from './Vector.js'
+import { Entity, MapColliderTrait, WalkTrait, Vector } from '@dattn/square-tomato-common'
 
 
 function createPlayerRenderer (entity, sprite) {
@@ -26,10 +23,10 @@ function createPlayerRenderer (entity, sprite) {
 
 export default function createPlayer (sprite, map) {
     const player = new Entity()
-    const walk = new Walk()
+    const walk = new WalkTrait()
     walk.speed = 15
     player.addTrait(walk)
-    player.addTrait(new MapCollider(map))
+    player.addTrait(new MapColliderTrait(map))
 
     player.render = createPlayerRenderer(player, sprite)
 
