@@ -10,10 +10,10 @@
     },
     "license": "MIT",
     "type": "module",
-    "main": "src/app.js",
+    "main": "src/run.js",
     "scripts": {
-        "app": "node --experimental-import-meta-resolve src/app.js",
-        "dev": "nodemon --experimental-import-meta-resolve src/app.js"
+        "app": "node --experimental-import-meta-resolve src/run.js",
+        "dev": "nodemon --experimental-import-meta-resolve src/run.js"
     },
     "dependencies": {
         "@dattn/square-tomato-frontend": "^0.1.0-dev",

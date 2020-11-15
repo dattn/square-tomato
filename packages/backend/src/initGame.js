@@ -1,30 +1,6 @@
-import Koa from 'koa'
-import serve from 'koa-static'
-import mount from 'koa-mount'
-import WebSocket from 'ws'
-import http from 'http'
-import path from 'path'
+import GameLoop from './GameLoop.js'
 
-(async () => {
-    const app = new Koa()
-    const server = http.createServer(app.callback())
-    const wss = new WebSocket.Server({
-        server,
-        path: '/ws',
-        perMessageDeflate: false
-    })
-
-    app.use(async (ctx, next) => {
-        ctx.set('Cross-Origin-Opener-Policy', 'same-origin')
-        ctx.set('Cross-Origin-Embedder-Policy', 'require-corp')
-        await next()
-    })
-
-    const frontendPackageFile = await import.meta.resolve('@dattn/square-tomato-frontend/package.json')
-    const frontendPath = path.resolve(path.dirname(frontendPackageFile.substr(7)), 'dist')
-    app.use(mount('/', serve(frontendPath)))
-    app.use(mount('/assets', serve(path.resolve('src/assets'))))
-
+export default function initGame (wss) {
     let NEXT_CLIENT_ID = 0
     const clients = new Map()
     const idsInUse = new Set()
@@ -110,5 +86,14 @@ import path from 'path'
         })
     })
 
-    server.listen(3100)
-})()
+    const update = (delta, deltaInMs, time) => {
+        console.log({ delta, deltaInMs, time })
+    }
+
+    const loop = new GameLoop({
+        fps: 30,
+        update
+    })
+
+    return { loop }
+}
