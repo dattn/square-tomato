@@ -9,3 +9,5 @@ export { default as ControlTrait } from './traits/Control.js'
 export { default as MapColliderTrait } from './traits/MapCollider.js'
 export { default as RemoteTrait } from './traits/Remote.js'
 export { default as WalkTrait } from './traits/Walk.js'
+
+export { default as createPlayerEntity } from './entities/createPlayer.js'

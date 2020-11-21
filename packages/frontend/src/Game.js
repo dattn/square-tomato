@@ -6,7 +6,7 @@ import RenderLayer from './RenderLayer.js'
 import { EntityContainer, KeyboardMouseInput, ControlTrait, RemoteTrait } from '@dattn/square-tomato-common'
 import GameMap from './Map.js'
 import SpriteSheet from './SpriteSheet.js'
-import createPlayer from './createPlayer.js'
+import createPlayer from './entities/createPlayer.js'
 import Camera from './Camera.js'
 
 function getWsUrl () {
@@ -49,7 +49,7 @@ async function startGame (elementToReplace) {
 
         const playerSprite = spriteSheet.getSprite('player/man-red/stand')
         const keyboardMouse = new KeyboardMouseInput()
-        const player = createPlayer(playerSprite, map)
+        const player = createPlayer(map, playerSprite)
         player.addTrait(new ControlTrait(keyboardMouse))
         player.position.set(3000, 3000)
         entityContainer.addEntity(player)

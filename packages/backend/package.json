@@ -16,6 +16,7 @@
         "dev": "nodemon --experimental-import-meta-resolve src/run.js"
     },
     "dependencies": {
+        "@dattn/square-tomato-common": "^0.1.0-dev",
         "@dattn/square-tomato-frontend": "^0.1.0-dev",
         "koa": "^2.13.0",
         "koa-mount": "^4.0.0",
